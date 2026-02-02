@@ -54,6 +54,14 @@ def load_pair(
     return pre_image, post_image, pre_mask, post_mask
 
 
+def damage_ratio(pre_mask: np.ndarray, post_mask: np.ndarray) -> float:
+    building_pixels = (pre_mask == BUILDING) | (pre_mask == 255)
+    if building_pixels.sum() == 0:
+        return 0.0
+    damaged = (post_mask == MAJOR_DAMAGE) | (post_mask == DESTROYED)
+    return float((building_pixels & damaged).sum()) / float(building_pixels.sum())
+
+
 def damage_counts(mask: np.ndarray) -> dict[str, int]:
     return {
         "no_damage": int(np.sum(mask == NO_DAMAGE)),
@@ -110,7 +118,6 @@ def visualize(
 
 
 def available_tiles(data_root: Path, disaster: str, masks_dir: str = "masks") -> list[str]:
-    """Return sorted list of tile IDs that have post_disaster masks."""
     mask_dir = data_root / disaster / masks_dir
     if not mask_dir.exists():
         return []
