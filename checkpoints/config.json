@@ -1,2 +1,15 @@
 {
-  "data": 
+  "data": "data",
+  "output": "checkpoints",
+  "epochs": 3,
+  "batch_size": 8,
+  "lr": 0.0001,
+  "val_frac": 0.15,
+  "test_frac": 0.15,
+  "encoder": "resnet34",
+  "size": 256,
+  "num_classes": 5,
+  "no_class_weights": false,
+  "weight_cap": 15.0,
+  "seed": 42
+}
