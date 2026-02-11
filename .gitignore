@@ -57,3 +57,4 @@ Thumbs.db
 .env.local
 
 data/
+predict_output/
