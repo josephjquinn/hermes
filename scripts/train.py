@@ -1,6 +1,13 @@
 import argparse
-import json
+import sys
 from pathlib import Path
+
+# Allow imports from repo root when run as script
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+
+import json
 
 import numpy as np
 import torch
@@ -8,8 +15,8 @@ import torch.nn as nn
 from torch.utils.data import DataLoader, random_split
 from tqdm import tqdm
 
-from common import get_device, mean_iou_torch, pixel_accuracy_torch
-from dataset import DamageSegmentationDataset, discover_disasters
+from model.common import get_device, mean_iou_torch, pixel_accuracy_torch
+from model.dataset import DamageSegmentationDataset, discover_disasters
 from model.model import DamageSegmentationModel
 
 

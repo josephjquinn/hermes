@@ -1,5 +1,11 @@
 import argparse
+import sys
 from pathlib import Path
+
+# Allow imports from repo root when run as script
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,14 +13,14 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from common import (
+from model.common import (
     CLASS_NAMES,
     get_device,
     load_model,
     mean_iou_np,
     pixel_accuracy_np,
 )
-from dataset import DamageSegmentationDataset, discover_disasters
+from model.dataset import DamageSegmentationDataset, discover_disasters
 from mask import damage_colored_mask
 
 IMAGENET_MEAN = np.array([0.485, 0.456, 0.406])

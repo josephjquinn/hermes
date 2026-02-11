@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from dataset import get_segmentation_eval_transforms
+from model.dataset import get_segmentation_eval_transforms
 from mask import damage_colored_mask, damage_counts
 from model.model import DamageSegmentationModel
 

@@ -1,13 +1,19 @@
 import argparse
+import sys
 from pathlib import Path
+
+# Allow imports from repo root when run as script
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
 
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 
-from common import CLASS_NAMES, get_device, load_model, mean_iou_np, pixel_accuracy_np
-from dataset import discover_disasters, get_segmentation_eval_transforms
+from model.common import CLASS_NAMES, get_device, load_model, mean_iou_np, pixel_accuracy_np
+from model.dataset import discover_disasters, get_segmentation_eval_transforms
 from mask import damage_colored_mask, load_mask
 
 
@@ -83,7 +89,7 @@ def _run_random_samples(args, model, device, size: int, num_classes: int):
     if args.seed is not None:
         np.random.seed(args.seed)
 
-    from dataset import DamageSegmentationDataset
+    from model.dataset import DamageSegmentationDataset
 
     disasters = discover_disasters(args.data)
     if not disasters:
