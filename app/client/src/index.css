@@ -8,78 +8,37 @@
 @theme inline {
   --font-sans: "DM Sans", system-ui, -apple-system, sans-serif;
   --font-serif: "Lora", Georgia, serif;
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-primary-dark: hsl(var(--primary-dark));
+  --color-accent: hsl(var(--accent));
   --color-muted: hsl(var(--muted));
   --color-muted-foreground: hsl(var(--muted-foreground));
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-  --color-card-lavender: hsl(var(--card-lavender));
-  --color-card-purple: hsl(var(--card-purple));
-  --color-card-magenta: hsl(var(--card-magenta));
-  --color-card-blue: hsl(var(--card-blue));
-  --color-card-coral: hsl(var(--card-coral));
-  --color-card-mint: hsl(var(--card-mint));
-  --color-card-orange: hsl(var(--card-orange));
-  --color-card-yellow: hsl(var(--card-yellow));
 }
 
 @layer base {
   :root {
-    --background: 32 71% 91%;
-    --foreground: 0 0% 0%;
-    --card: 32 71% 91%;
-    --card-foreground: 0 0% 0%;
-    --primary: 322 82% 83%;
-    --primary-foreground: 0 0% 0%;
-    --primary-hover: 29 100% 50%;
-    --secondary: 288 38% 40%;
-    --secondary-foreground: 0 0% 100%;
-    --secondary-hover: 288 38% 32%;
-    --muted: 32 50% 88%;
-    --muted-foreground: 0 0% 40%;
-    --accent: 273 61% 78%;
-    --accent-foreground: 0 0% 0%;
-    --card-yellow: 45 91% 62%;
-    --card-purple: 273 61% 78%;
-    --card-magenta: 321 68% 57%;
-    --card-blue: 199 92% 73%;
-    --card-coral: 349 89% 72%;
-    --card-mint: 156 72% 67%;
-    --card-orange: 24 90% 61%;
-    --card-lavender: 248 84% 84%;
-    --border: 0 0% 0%;
-    --input: 0 0% 0%;
-    --ring: 288 38% 40%;
-    --radius: 1.5rem;
-    --transition-fast: 150ms ease-in-out;
-    --transition-medium: 300ms ease-in-out;
-    --transition-slow: 500ms cubic-bezier(0.34, 1, 0.64, 1);
-  }
-
-  .dark {
-    --background: 20 18% 16%;
-    --foreground: 32 71% 91%;
-    --card: 20 14% 25%;
-    --card-foreground: 32 71% 91%;
-    --border: 20 12% 37%;
-    --input: 20 12% 37%;
+    /* Logo-inspired: black, deep reds, maroon, cream/off-white, orange accent */
+    --background: 0 0% 0%;
+    --foreground: 30 25% 95%;
+    --card: 0 25% 6%;
+    --card-foreground: 30 25% 95%;
+    --primary: 8 78% 52%;
+    --primary-foreground: 0 0% 100%;
+    --primary-dark: 355 55% 28%;
+    --accent: 25 90% 55%;
+    --muted: 0 20% 12%;
+    --muted-foreground: 20 15% 55%;
+    --border: 0 45% 22%;
+    --input: 0 35% 18%;
+    --ring: 8 78% 52%;
   }
 
   * {
@@ -91,77 +50,152 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
-    font-family: "Lora", Georgia, serif;
+    @apply bg-background text-foreground antialiased font-serif;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  button,
-  nav,
-  .heading,
-  .sans-serif {
-    font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+  h1, h2, h3, h4, h5, h6, button, nav, .font-sans {
+    font-family: var(--font-sans);
   }
 }
 
 @layer components {
   .btn-filled {
-    @apply border-2 border-foreground py-3 px-7 rounded-full inline-flex items-center gap-2 uppercase font-bold transition-all duration-200;
-    background-color: hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
-    transition-timing-function: cubic-bezier(0.34, 1, 0.64, 1);
-  }
-  .btn-filled:hover {
-    background-color: hsl(var(--primary-hover));
+    @apply border border-primary bg-primary text-primary-foreground py-2.5 px-6 uppercase font-sans font-bold text-sm tracking-wider transition-opacity duration-150 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-transparent {
-    @apply bg-transparent border-2 border-foreground text-foreground uppercase font-bold py-3 px-7 rounded-full inline-flex items-center gap-2 transition-all duration-200;
-    transition-timing-function: cubic-bezier(0.34, 1, 0.64, 1);
-  }
-  .btn-transparent:hover {
-    @apply bg-foreground text-background;
-  }
-
-  .card-hover {
-    @apply transition-transform duration-500;
-    transition-timing-function: cubic-bezier(0.34, 1, 0.64, 1);
-  }
-  .card-hover:hover {
-    transform: scale(1.02);
+    @apply bg-transparent border border-primary text-primary uppercase font-sans font-bold py-2.5 px-6 text-sm tracking-wider transition-colors duration-150 hover:bg-primary/10 hover:border-primary;
   }
 
   .heading-xl {
-    @apply font-black uppercase tracking-tighter leading-[0.72];
-    font-size: clamp(3rem, 8vw, 9rem);
+    @apply font-sans font-extrabold uppercase tracking-tight leading-[0.9];
+    font-size: clamp(2.5rem, 6vw, 5rem);
   }
   .heading-lg {
-    @apply font-extrabold md:font-black tracking-normal leading-tight;
-    font-size: clamp(1.875rem, 4vw, 3rem);
+    @apply font-sans font-extrabold uppercase tracking-tight leading-tight;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
   }
   .heading-md {
-    @apply font-extrabold tracking-normal;
-    font-size: clamp(1.5rem, 2.5vw, 1.875rem);
+    @apply font-sans font-bold uppercase tracking-tight;
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
   }
   .heading-sm {
-    @apply font-bold text-xl uppercase tracking-tight;
+    @apply font-sans font-bold text-base uppercase tracking-tight;
   }
+
   .nav-text {
-    @apply uppercase font-bold text-sm tracking-[1.8px];
+    @apply font-sans uppercase font-bold text-xs tracking-widest;
   }
-  .body-text {
-    font-family: "Lora", Georgia, serif;
-    @apply font-normal leading-[1.25];
-    font-size: clamp(1.25rem, 2.5vw, 2rem);
+
+  .text-gradient-animated {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--primary)),
+      hsl(var(--accent)),
+      hsl(var(--primary-dark)),
+      hsl(var(--primary))
+    );
+    background-size: 300% 100%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: gradient-shift 4s ease infinite;
   }
-  .logo-text {
-    font-family: "Lora", Georgia, serif;
-    font-style: italic;
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .prose-copy {
+    @apply font-serif text-base md:text-lg leading-[1.7];
+  }
+
+  /* Range slider – use primary red */
+  input[type="range"]::-webkit-slider-thumb {
+    @apply appearance-none w-4 h-4 rounded-full bg-primary cursor-pointer;
+  }
+  input[type="range"]::-moz-range-thumb {
+    @apply w-4 h-4 rounded-full bg-primary cursor-pointer border-0;
+  }
+
+  /* MapLibre popup – match app theme */
+  .damage-map-popup.maplibregl-popup-content {
+    background: hsl(var(--card));
+    border: 1px solid hsl(var(--border));
+    padding: 0;
+    box-shadow: none;
+  }
+  .damage-map-popup .maplibregl-popup-close-button {
+    color: hsl(var(--foreground));
+    font-size: 18px;
+  }
+  .damage-tooltip-inner {
+    padding: 0.5rem 0.75rem;
+    min-width: 140px;
+  }
+  .damage-tooltip-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.375rem;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  .damage-tooltip-label {
+    font-size: 0.6875rem;
     font-weight: 600;
+    font-family: var(--font-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: hsl(var(--muted-foreground));
+  }
+  .damage-tooltip-score {
+    font-size: 0.875rem;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    color: hsl(var(--foreground));
+  }
+  .damage-tooltip-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .damage-tooltip-mask {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    border: 1px solid hsl(var(--border));
+    flex-shrink: 0;
+  }
+  .damage-tooltip-stats-title {
+    font-size: 0.5625rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: hsl(var(--muted-foreground));
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  .damage-tooltip-stats-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.625rem;
+  }
+  .damage-tooltip-stat-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.125rem 0;
+  }
+  .damage-tooltip-stat-name {
+    color: hsl(var(--muted-foreground));
+    text-transform: capitalize;
+  }
+  .damage-tooltip-stat-pct {
+    color: hsl(var(--foreground));
+    font-variant-numeric: tabular-nums;
   }
 }
