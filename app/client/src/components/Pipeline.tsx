@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+
 const STEPS = [
   { id: "upload", label: "Upload" },
   { id: "preprocess", label: "Preprocess" },
@@ -13,19 +15,15 @@ type PipelineProps = {
 
 export function Pipeline({ currentStep = null }: PipelineProps) {
   return (
-    <section
-      className="rounded-[1.5rem] px-6 py-8 sm:px-10 sm:py-12"
-      style={{ backgroundColor: "#C8A8E9" }}
-    >
-      <h2 className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-foreground/60">
-        App pipeline
-      </h2>
-      <h3 className="mb-4 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+    <section className="border border-border bg-card px-6 py-8 max-w-lg">
+      <p className="text-[11px] font-sans font-bold uppercase tracking-widest text-muted-foreground mb-2">
+        Pipeline
+      </p>
+      <h2 className="heading-sm text-foreground mb-3">
         How it works
-      </h3>
-      <p className="mb-10 max-w-xl font-serif text-base leading-relaxed text-foreground/90 sm:text-lg">
-        After you upload an image, we preprocess it, run our damage classifier, and return a
-        damage ratio.
+      </h2>
+      <p className="prose-copy text-foreground/80 mb-8">
+        After you upload an image, we preprocess it, run our damage classifier, and return a damage ratio.
       </p>
 
       <ol className="space-y-4 sm:space-y-5">
@@ -35,20 +33,22 @@ export function Pipeline({ currentStep = null }: PipelineProps) {
           return (
             <li key={step.id} className="flex items-baseline gap-4">
               <span
-                className={`text-sm tabular-nums ${
-                  isActive ? "font-bold text-foreground" : "text-foreground/60"
-                }`}
+                className={cn(
+                  "text-sm font-sans tabular-nums",
+                  isActive ? "font-bold text-foreground" : "text-foreground/50"
+                )}
               >
                 {String(i + 1).padStart(2, "0")}
               </span>
               <span
-                className={`font-sans text-lg sm:text-xl ${
+                className={cn(
+                  "font-sans text-lg sm:text-xl",
                   isActive
                     ? "font-bold text-foreground"
                     : isPast
-                      ? "font-medium text-foreground/90"
-                      : "text-foreground/70"
-                }`}
+                      ? "font-medium text-foreground/80"
+                      : "text-foreground/60"
+                )}
               >
                 {step.label}
               </span>
