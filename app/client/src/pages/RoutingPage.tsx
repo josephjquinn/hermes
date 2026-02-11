@@ -343,6 +343,35 @@ export default function RoutingPage() {
               )}
           </section>
 
+          {routingResults.routeOrder != null && routingResults.routeOrder.length > 0 && (
+            <section className="mb-6 border border-border bg-card p-4 sm:p-5">
+              <h3 className="heading-sm text-foreground mb-3">Visit order</h3>
+              <div className="flex flex-wrap items-center gap-1 sm:gap-2">
+                {routingResults.routeOrder.map((oneBasedIndex, visitIndex) => {
+                  const isLast = visitIndex === routingResults.routeOrder!.length - 1;
+                  return (
+                    <span key={visitIndex} className="flex items-center gap-1 sm:gap-2">
+                      <span className="flex size-8 sm:size-9 shrink-0 items-center justify-center rounded-full border-2 border-primary bg-primary/15 font-sans text-sm font-bold text-primary tabular-nums">
+                        {oneBasedIndex}
+                      </span>
+                      {!isLast && (
+                        <svg
+                          className="size-4 sm:size-5 shrink-0 text-muted-foreground"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                      )}
+                    </span>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
           <DamageMap
             points={routingResults.points}
             hub={routingResults.hub ?? undefined}
@@ -442,7 +471,7 @@ export default function RoutingPage() {
                 Seed Colorado (7 stops)
               </Button>
               <Button variant="transparent" showArrow={false} onClick={handleSeedJapan} className="text-xs py-2 px-5">
-                Seed Japan (7 stops)
+                Seed Japan (14 stops)
               </Button>
               <Button
                 variant="transparent"
@@ -454,7 +483,7 @@ export default function RoutingPage() {
                 Random seed
               </Button>
               <span className="text-sm text-foreground/60 font-sans">
-                Seed: 7 stops around Denver or Tokyo. Random seed: shuffle lat/long and image pairs (need 2+ complete locations).
+                Seed: 7 stops around Denver, 14 around Tokyo. Random seed: shuffle lat/long and image pairs (need 2+ complete locations).
               </span>
             </div>
             <div className="space-y-6">

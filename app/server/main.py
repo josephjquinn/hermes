@@ -282,6 +282,23 @@ _JAPAN_HUB_LAT = 35.6762
 _JAPAN_HUB_LNG = 139.6503
 _JAPAN_IMAGE_IDS = [
     "000092", "009307", "000147", "008382", "000013", "000042", "000248",
+    "000059", "000102", "000120", "000161", "000191", "000236", "000295",
+]
+_JAPAN_SEED_OFFSETS: list[tuple[float, float]] = [
+    (0.072, 0.018),
+    (0.031, 0.089),
+    (-0.058, 0.041),
+    (-0.024, -0.076),
+    (0.085, -0.035),
+    (-0.047, 0.062),
+    (0.012, -0.091),
+    (0.098, 0.055),
+    (-0.066, -0.052),
+    (0.041, -0.088),
+    (-0.079, 0.027),
+    (0.053, 0.071),
+    (-0.038, -0.094),
+    (0.089, -0.061),
 ]
 
 _SEED_OFFSETS: list[tuple[float, float]] = [
@@ -347,7 +364,7 @@ def seed_colorado():
 def seed_japan():
     data_dir = ROOT / "data" / "EARTHQUAKE-TURKEY" / "images"
     coords = _seed_coords_from_hub(
-        _JAPAN_HUB_LAT, _JAPAN_HUB_LNG, _SEED_OFFSETS
+        _JAPAN_HUB_LAT, _JAPAN_HUB_LNG, _JAPAN_SEED_OFFSETS
     )
     return _build_seed_response(
         data_dir, coords, _JAPAN_HUB_LAT, _JAPAN_HUB_LNG, _JAPAN_IMAGE_IDS

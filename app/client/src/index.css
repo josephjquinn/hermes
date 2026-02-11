@@ -118,84 +118,80 @@
     @apply w-4 h-4 rounded-full bg-primary cursor-pointer border-0;
   }
 
-  /* MapLibre popup – match app theme */
+  /* MapLibre popup – base */
   .damage-map-popup.maplibregl-popup-content {
-    background: hsl(var(--card));
-    border: 1px solid hsl(var(--border));
     padding: 0;
-    box-shadow: none;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .maplibregl-popup-content.damage-map-popup + .maplibregl-popup-tip {
+    border-top-color: #f5f5f4;
   }
   .damage-map-popup .maplibregl-popup-close-button {
-    color: hsl(var(--foreground));
+    color: #1c1917;
     font-size: 18px;
   }
-  .damage-tooltip-inner {
-    padding: 0.5rem 0.75rem;
-    min-width: 140px;
+
+  /* Location tooltip: light, compact, clear spacing */
+  .damage-map-popup-location.maplibregl-popup-content {
+    background: #f5f5f4;
+    min-width: 0;
   }
-  .damage-tooltip-header {
+  .location-tooltip {
+    padding: 8px 10px;
+    font-family: var(--font-sans);
+    color: #1c1917;
+  }
+  .location-tooltip__row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    padding-bottom: 0.375rem;
-    border-bottom: 1px solid hsl(var(--border));
+    gap: 12px;
+    min-width: 0;
   }
-  .damage-tooltip-label {
-    font-size: 0.6875rem;
+  .location-tooltip__label {
+    font-size: 11px;
     font-weight: 600;
-    font-family: var(--font-sans);
     text-transform: uppercase;
-    letter-spacing: 0.02em;
-    color: hsl(var(--muted-foreground));
+    letter-spacing: 0.03em;
+    color: #44403c;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 0;
   }
-  .damage-tooltip-score {
-    font-size: 0.875rem;
+  .location-tooltip__score {
+    font-size: 14px;
     font-weight: 700;
-    font-family: var(--font-sans);
-    color: hsl(var(--foreground));
-  }
-  .damage-tooltip-body {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-  .damage-tooltip-mask {
-    width: 72px;
-    height: 72px;
-    object-fit: contain;
-    border: 1px solid hsl(var(--border));
+    color: #991b1b;
     flex-shrink: 0;
-  }
-  .damage-tooltip-stats-title {
-    font-size: 0.5625rem;
-    font-weight: 600;
-    font-family: var(--font-sans);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: hsl(var(--muted-foreground));
-    display: block;
-    margin-bottom: 0.25rem;
-  }
-  .damage-tooltip-stats-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    font-size: 0.625rem;
-  }
-  .damage-tooltip-stat-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 0.5rem;
-    padding: 0.125rem 0;
-  }
-  .damage-tooltip-stat-name {
-    color: hsl(var(--muted-foreground));
-    text-transform: capitalize;
-  }
-  .damage-tooltip-stat-pct {
-    color: hsl(var(--foreground));
     font-variant-numeric: tabular-nums;
+  }
+  .location-tooltip__mask {
+    margin-top: 8px;
+    line-height: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+  .location-tooltip__mask img {
+    display: block;
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    background: #fff;
+  }
+
+  /* Hub tooltip */
+  .damage-map-popup-hub.maplibregl-popup-content {
+    background: #f5f5f4;
+    padding: 8px 10px;
+  }
+  .hub-tooltip-content {
+    color: #1c1917;
+    font-size: 12px;
   }
 }

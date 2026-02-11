@@ -287,12 +287,12 @@ export function DamageMap({ points, hub, routeOrder, className = "" }: DamageMap
                   anchor="bottom"
                   onClose={() => setHoveredHub(false)}
                   closeButton={false}
-                  className="damage-map-popup"
+                  className="damage-map-popup damage-map-popup-hub"
                 >
-                  <div className="text-xs font-sans">
+                  <div className="hub-tooltip-content text-xs font-sans text-black">
                     <span className="font-semibold">Emergency service hub</span>
                     <br />
-                    <span className="text-muted-foreground">
+                    <span className="text-black/90">
                       {hub.lat.toFixed(5)}, {hub.lng.toFixed(5)}
                     </span>
                   </div>
@@ -302,7 +302,7 @@ export function DamageMap({ points, hub, routeOrder, className = "" }: DamageMap
           )}
 
           {points.map((p, i) => {
-            const label = visitOrderForIndex?.get(i) != null ? visitOrderForIndex.get(i)! + 1 : i + 1;
+            const label = i + 1; /* location number */
             return (
               <Marker key={i} longitude={p.lng} latitude={p.lat} anchor="center">
                 <div
@@ -325,27 +325,26 @@ export function DamageMap({ points, hub, routeOrder, className = "" }: DamageMap
               anchor="top"
               onClose={() => setHoveredIndex(null)}
               closeButton={false}
-              className="damage-map-popup"
+              className="damage-map-popup damage-map-popup-location"
               offset={16}
             >
-              <div className="damage-tooltip-inner min-w-[140px]">
-                <div className="damage-tooltip-header">
-                  <span className="damage-tooltip-label">
+              <div className="location-tooltip">
+                <div className="location-tooltip__row">
+                  <span className="location-tooltip__label" title={points[hoveredIndex].label ?? `Location ${hoveredIndex + 1}`}>
                     {visitOrderForIndex != null && visitOrderForIndex.has(hoveredIndex)
                       ? `Stop ${visitOrderForIndex.get(hoveredIndex)! + 1} · ${points[hoveredIndex].label ?? `Location ${hoveredIndex + 1}`}`
                       : points[hoveredIndex].label ?? `Location ${hoveredIndex + 1}`}
                   </span>
-                  <span className="damage-tooltip-score">{points[hoveredIndex].damage_score}</span>
+                  <span className="location-tooltip__score">{points[hoveredIndex].damage_score}</span>
                 </div>
-                <div className="damage-tooltip-body">
-                  {points[hoveredIndex].mask_image_base64 && (
+                {points[hoveredIndex].mask_image_base64 && (
+                  <div className="location-tooltip__mask">
                     <img
                       src={`data:image/png;base64,${points[hoveredIndex].mask_image_base64}`}
                       alt="Damage mask"
-                      className="damage-tooltip-mask"
                     />
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </Popup>
           )}
@@ -353,9 +352,9 @@ export function DamageMap({ points, hub, routeOrder, className = "" }: DamageMap
       </div>
 
       {selectedPoint && (
-        <aside className="w-full lg:w-72 shrink-0 border border-border bg-card overflow-hidden flex flex-col max-h-[500px] lg:max-h-none">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
-            <h3 className="heading-sm text-foreground font-semibold">
+        <aside className="w-full shrink-0 border border-border bg-card overflow-hidden flex flex-col aspect-square max-w-[360px] mx-auto lg:max-w-none lg:w-[480px] lg:h-[480px] lg:aspect-auto lg:mx-0 lg:self-start">
+          <div className="flex items-center justify-between px-3 py-2 border-b border-border shrink-0">
+            <h3 className="heading-sm text-foreground font-semibold truncate pr-2">
               {visitOrderForIndex != null && visitOrderForIndex.has(selectedIndex!)
                 ? `Stop ${visitOrderForIndex.get(selectedIndex!)! + 1} · ${selectedPoint.label ?? `Location ${selectedIndex! + 1}`}`
                 : selectedPoint.label ?? `Location ${selectedIndex! + 1}`}
@@ -363,80 +362,68 @@ export function DamageMap({ points, hub, routeOrder, className = "" }: DamageMap
             <button
               type="button"
               onClick={() => setSelectedIndex(null)}
-              className="text-muted-foreground hover:text-foreground p-1 font-sans font-medium transition-colors"
+              className="text-muted-foreground hover:text-foreground p-1 font-sans font-medium transition-colors shrink-0"
               aria-label="Close"
             >
               ✕
             </button>
           </div>
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-card">
-            {(selectedPoint.pre_image_base64 || selectedPoint.post_image_base64) && (
-              <div className="space-y-3 border-b border-border pb-3">
-                {selectedPoint.pre_image_base64 && (
-                  <div>
-                    <div className="text-xs font-sans font-medium text-muted-foreground uppercase tracking-wider mb-1.5">Pre-disaster</div>
-                    <img
-                      src={selectedPoint.pre_image_base64}
-                      alt="Pre-disaster"
-                      className="w-full max-w-[220px] h-auto border border-border rounded object-cover"
-                    />
-                  </div>
-                )}
-                {selectedPoint.post_image_base64 && (
-                  <div>
-                    <div className="text-xs font-sans font-medium text-muted-foreground uppercase tracking-wider mb-1.5">Post-disaster</div>
-                    <img
-                      src={selectedPoint.post_image_base64}
-                      alt="Post-disaster"
-                      className="w-full max-w-[220px] h-auto border border-border rounded object-cover"
-                    />
-                  </div>
+          <div className="grid grid-cols-2 grid-rows-2 flex-1 min-h-0 gap-px bg-border">
+            <div className="bg-card flex flex-col min-h-0 overflow-hidden">
+              <div className="text-[10px] font-sans font-medium text-muted-foreground uppercase tracking-wider px-2 py-1 shrink-0">Post</div>
+              <div className="flex-1 min-h-0 flex items-center justify-center bg-muted/30">
+                {selectedPoint.post_image_base64 ? (
+                  <img src={selectedPoint.post_image_base64} alt="Post-disaster" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-xs text-muted-foreground">—</span>
                 )}
               </div>
-            )}
-            <div className="border-t border-border px-4 py-3">
-              <div className="flex justify-between items-center">
-                <span className="text-xs font-sans font-medium text-muted-foreground uppercase tracking-wider">Damage score</span>
-                <span className="font-sans font-bold tabular-nums text-foreground">{selectedPoint.damage_score}</span>
-              </div>
-              <p className="mt-0.5 text-[11px] text-muted-foreground font-sans">Out of 100</p>
             </div>
-
-            <div className="border-t border-border px-4 py-3">
-              <div className="text-xs font-sans font-medium text-muted-foreground uppercase tracking-wider mb-1">Coordinates</div>
-              <div className="text-foreground font-mono text-sm">
-                {selectedPoint.lat.toFixed(5)}, {selectedPoint.lng.toFixed(5)}
+            <div className="bg-card flex flex-col min-h-0 overflow-hidden">
+              <div className="text-[10px] font-sans font-medium text-muted-foreground uppercase tracking-wider px-2 py-1 shrink-0">Pre</div>
+              <div className="flex-1 min-h-0 flex items-center justify-center bg-muted/30">
+                {selectedPoint.pre_image_base64 ? (
+                  <img src={selectedPoint.pre_image_base64} alt="Pre-disaster" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-xs text-muted-foreground">—</span>
+                )}
               </div>
             </div>
-
-            {selectedPoint.stats && (
-              <div className="border-t border-border px-4 py-3">
-                <div className="text-xs font-sans font-medium text-muted-foreground uppercase tracking-wider mb-2">Damage breakdown</div>
-                <ul className="space-y-1.5 text-sm font-serif">
-                  {Object.entries(selectedPoint.stats)
-                    .filter(([name]) => name !== "background")
-                    .map(([name, { pixels, percent }]) => (
-                      <li key={name} className="flex justify-between gap-4 text-foreground">
-                        <span>{name.replace(/_/g, " ")}</span>
-                        <span className="tabular-nums text-foreground font-sans shrink-0 text-xs">
-                          {pixels.toLocaleString()} px ({percent}%)
-                        </span>
-                      </li>
-                    ))}
-                </ul>
+            <div className="bg-card flex flex-col min-h-0 overflow-hidden">
+              <div className="text-[10px] font-sans font-medium text-muted-foreground uppercase tracking-wider px-2 py-1 shrink-0">Damage mask</div>
+              <div className="flex-1 min-h-0 flex items-center justify-center bg-muted/30">
+                {selectedPoint.mask_image_base64 ? (
+                  <img
+                    src={`data:image/png;base64,${selectedPoint.mask_image_base64}`}
+                    alt="Damage mask"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-xs text-muted-foreground">—</span>
+                )}
               </div>
-            )}
-
-            {selectedPoint.mask_image_base64 && (
-              <div className="border-t border-border px-4 py-3">
-                <div className="text-xs font-sans font-medium text-muted-foreground uppercase tracking-wider mb-2">Damage mask</div>
-                <img
-                  src={`data:image/png;base64,${selectedPoint.mask_image_base64}`}
-                  alt="Damage segmentation mask"
-                  className="w-full max-w-[220px] h-auto border border-border"
-                />
-              </div>
-            )}
+            </div>
+            <div className="bg-card flex flex-col min-h-0 overflow-y-auto p-3">
+              <div className="text-[10px] font-sans font-medium text-muted-foreground uppercase tracking-wider mb-1">Damage score</div>
+              <p className="font-sans font-bold tabular-nums text-foreground text-sm">{selectedPoint.damage_score} <span className="font-normal text-muted-foreground text-xs">/ 100</span></p>
+              <div className="text-[10px] font-sans font-medium text-muted-foreground uppercase tracking-wider mt-2 mb-0.5">Coordinates</div>
+              <p className="font-mono text-xs text-foreground">{selectedPoint.lat.toFixed(5)}, {selectedPoint.lng.toFixed(5)}</p>
+              {selectedPoint.stats && (
+                <>
+                  <div className="text-[10px] font-sans font-medium text-muted-foreground uppercase tracking-wider mt-2 mb-1">Breakdown</div>
+                  <ul className="space-y-0.5 text-xs font-serif text-foreground">
+                    {Object.entries(selectedPoint.stats)
+                      .filter(([name]) => name !== "background")
+                      .map(([name, { percent }]) => (
+                        <li key={name} className="flex justify-between gap-2">
+                          <span>{name.replace(/_/g, " ")}</span>
+                          <span className="tabular-nums font-sans shrink-0">{percent}%</span>
+                        </li>
+                      ))}
+                  </ul>
+                </>
+              )}
+            </div>
           </div>
         </aside>
       )}
