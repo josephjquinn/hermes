@@ -1,5 +1,4 @@
 import base64
-import math
 import os
 import sys
 from pathlib import Path
@@ -271,41 +270,54 @@ Use plain language. Be specific about scores and percentages."""
         raise HTTPException(status_code=502, detail=f"OpenAI API error: {str(e)}")
 
 
-_SEED_HUB_LAT = 39.7392
-_SEED_HUB_LNG = -104.9903
-_SEED_RADIUS_DEG = 0.035
 _N_SEED_STOPS = 7
-_SEED_IMAGE_IDS = ["000013", "000248", "008382", "009307"]
+
+_COLORADO_HUB_LAT = 39.7392
+_COLORADO_HUB_LNG = -104.9903
+_COLORADO_IMAGE_IDS = [
+    "000013", "000248", "008382", "009307", "000042", "000092", "000147",
+]
+
+_JAPAN_HUB_LAT = 35.6762
+_JAPAN_HUB_LNG = 139.6503
+_JAPAN_IMAGE_IDS = [
+    "000092", "009307", "000147", "008382", "000013", "000042", "000248",
+]
+
+_SEED_OFFSETS: list[tuple[float, float]] = [
+    (0.072, 0.018),
+    (0.031, 0.089),
+    (-0.058, 0.041),
+    (-0.024, -0.076),
+    (0.085, -0.035),
+    (-0.047, 0.062),
+    (0.012, -0.091),
+]
 
 
-def _seed_coords_around_hub(n: int) -> list[tuple[float, float]]:
-    coords = []
-    for i in range(n):
-        angle_deg = 360.0 * i / n
-        angle_rad = math.radians(angle_deg)
-        dlat = _SEED_RADIUS_DEG * math.cos(angle_rad)
-        dlng = _SEED_RADIUS_DEG * math.sin(angle_rad)
-        coords.append((_SEED_HUB_LAT + dlat, _SEED_HUB_LNG + dlng))
-    return coords
+def _seed_coords_from_hub(
+    hub_lat: float, hub_lng: float, offsets: list[tuple[float, float]]
+) -> list[tuple[float, float]]:
+    return [(hub_lat + dlat, hub_lng + dlng) for dlat, dlng in offsets]
 
 
-_COLORADO_COORDS = _seed_coords_around_hub(_N_SEED_STOPS)
-
-
-@app.get("/seed/colorado")
-def seed_colorado():
-    data_dir = ROOT / "data" / "EARTHQUAKE-TURKEY" / "images"
+def _build_seed_response(
+    data_dir: Path,
+    coords: list[tuple[float, float]],
+    hub_lat: float,
+    hub_lng: float,
+    image_ids: list[str],
+) -> dict:
     if not data_dir.exists():
         raise HTTPException(status_code=404, detail="Seed data directory not found")
-    num_stops = 7
     entries = []
-    for i in range(num_stops):
-        img_id = _SEED_IMAGE_IDS[i % len(_SEED_IMAGE_IDS)]
+    for i in range(len(coords)):
+        img_id = image_ids[i % len(image_ids)]
         pre_path = data_dir / f"EARTHQUAKE-TURKEY_{img_id}_pre_disaster.png"
         post_path = data_dir / f"EARTHQUAKE-TURKEY_{img_id}_post_disaster.png"
         if not pre_path.exists() or not post_path.exists():
             raise HTTPException(status_code=404, detail=f"Seed image pair not found: {img_id}")
-        lat, lng = _COLORADO_COORDS[i]
+        lat, lng = coords[i]
         pre_b64 = base64.b64encode(pre_path.read_bytes()).decode("ascii")
         post_b64 = base64.b64encode(post_path.read_bytes()).decode("ascii")
         entries.append({
@@ -316,8 +328,30 @@ def seed_colorado():
         })
     return {
         "entries": entries,
-        "hub": {"lat": _SEED_HUB_LAT, "lng": _SEED_HUB_LNG},
+        "hub": {"lat": hub_lat, "lng": hub_lng},
     }
+
+
+@app.get("/seed/colorado")
+def seed_colorado():
+    data_dir = ROOT / "data" / "EARTHQUAKE-TURKEY" / "images"
+    coords = _seed_coords_from_hub(
+        _COLORADO_HUB_LAT, _COLORADO_HUB_LNG, _SEED_OFFSETS
+    )
+    return _build_seed_response(
+        data_dir, coords, _COLORADO_HUB_LAT, _COLORADO_HUB_LNG, _COLORADO_IMAGE_IDS
+    )
+
+
+@app.get("/seed/japan")
+def seed_japan():
+    data_dir = ROOT / "data" / "EARTHQUAKE-TURKEY" / "images"
+    coords = _seed_coords_from_hub(
+        _JAPAN_HUB_LAT, _JAPAN_HUB_LNG, _SEED_OFFSETS
+    )
+    return _build_seed_response(
+        data_dir, coords, _JAPAN_HUB_LAT, _JAPAN_HUB_LNG, _JAPAN_IMAGE_IDS
+    )
 
 
 @app.get("/health")

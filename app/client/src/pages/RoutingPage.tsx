@@ -2,7 +2,7 @@ import { useState } from "react";
 import { UploadZone } from "../components/UploadZone";
 import { DamageMap, type DamagePoint } from "../components/DamageMap";
 import Button from "../components/Button";
-import { predict, seedColorado, computeRoute, generateSummary, type RoutingAlgorithm } from "../api";
+import { predict, seedColorado, seedJapan, computeRoute, generateSummary, type RoutingAlgorithm } from "../api";
 
 type RoutingResultsState = {
   points: DamagePoint[];
@@ -233,6 +233,28 @@ export default function RoutingPage() {
     }
   };
 
+  const handleSeedJapan = async () => {
+    setSeedError(null);
+    try {
+      const data = await seedJapan();
+      const entriesFromApi = data.entries ?? [];
+      const newEntries: RoutingEntry[] = entriesFromApi.map((e, i) => ({
+        id: crypto.randomUUID(),
+        preFile: base64ToFile(e.pre_base64, `seed_japan_${i + 1}_pre.png`),
+        postFile: base64ToFile(e.post_base64, `seed_japan_${i + 1}_post.png`),
+        lat: String(e.lat),
+        lng: String(e.lng),
+      }));
+      setRoutingEntries(newEntries);
+      if (data.hub) {
+        setHubLat(String(data.hub.lat));
+        setHubLng(String(data.hub.lng));
+      }
+    } catch (e) {
+      setSeedError(e instanceof Error ? e.message : String(e));
+    }
+  };
+
   const shuffleArray = <T,>(arr: T[]): T[] => {
     const out = [...arr];
     for (let i = out.length - 1; i > 0; i--) {
@@ -417,7 +439,10 @@ export default function RoutingPage() {
           <section className="mb-10">
             <div className="mb-6 flex flex-wrap items-center gap-3">
               <Button variant="transparent" showArrow={false} onClick={handleSeedColorado} className="text-xs py-2 px-5">
-                Seed with 7 stops around hub
+                Seed Colorado (7 stops)
+              </Button>
+              <Button variant="transparent" showArrow={false} onClick={handleSeedJapan} className="text-xs py-2 px-5">
+                Seed Japan (7 stops)
               </Button>
               <Button
                 variant="transparent"
@@ -429,7 +454,7 @@ export default function RoutingPage() {
                 Random seed
               </Button>
               <span className="text-sm text-foreground/60 font-sans">
-                Seed: 7 stops around Denver. Random seed: shuffle lat/long and image pairs (need 2+ complete locations).
+                Seed: 7 stops around Denver or Tokyo. Random seed: shuffle lat/long and image pairs (need 2+ complete locations).
               </span>
             </div>
             <div className="space-y-6">

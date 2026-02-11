@@ -100,6 +100,22 @@ export async function seedColorado(): Promise<SeedColoradoResponse> {
   return res.json() as Promise<SeedColoradoResponse>;
 }
 
+export async function seedJapan(): Promise<SeedColoradoResponse> {
+  const res = await fetch(`${BASE_URL}/seed/japan`);
+  if (!res.ok) {
+    const text = await res.text();
+    let message = `${res.status} ${res.statusText}`;
+    try {
+      const json = JSON.parse(text) as { detail?: string };
+      if (json.detail) message = json.detail;
+    } catch {
+      if (text) message = text;
+    }
+    throw new Error(message);
+  }
+  return res.json() as Promise<SeedColoradoResponse>;
+}
+
 export type RouteResponse = {
   order: number[];
   total_distance_km: number;
