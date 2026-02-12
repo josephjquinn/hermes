@@ -25,7 +25,22 @@
 
 @layer base {
   :root {
-    /* Logo-inspired: black, deep reds, maroon, cream/off-white, orange accent */
+    --background: 0 0% 98%;
+    --foreground: 0 0% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 15%;
+    --primary: 8 78% 52%;
+    --primary-foreground: 0 0% 100%;
+    --primary-dark: 355 55% 28%;
+    --accent: 25 90% 55%;
+    --muted: 0 0% 85%;
+    --muted-foreground: 0 0% 45%;
+    --border: 0 0% 90%;
+    --input: 0 0% 96%;
+    --ring: 8 78% 52%;
+  }
+
+  .dark {
     --background: 0 0% 0%;
     --foreground: 30 25% 95%;
     --card: 0 25% 6%;
@@ -185,7 +200,19 @@
     background: #fff;
   }
 
-  /* Hub tooltip */
+  .dark .damage-map-popup-location.maplibregl-popup-content {
+    background: #0a0a0a;
+  }
+  .dark .location-tooltip {
+    color: #f5f5f4;
+  }
+  .dark .location-tooltip__label {
+    color: #d6d3d1;
+  }
+  .dark .location-tooltip__mask img {
+    background: #1a1a1a;
+  }
+
   .damage-map-popup-hub.maplibregl-popup-content {
     background: #f5f5f4;
     padding: 8px 10px;
@@ -193,5 +220,12 @@
   .hub-tooltip-content {
     color: #1c1917;
     font-size: 12px;
+  }
+
+  .dark .damage-map-popup-hub.maplibregl-popup-content {
+    background: #0a0a0a;
+  }
+  .dark .hub-tooltip-content {
+    color: #f5f5f4;
   }
 }
