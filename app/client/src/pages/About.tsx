@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function About() {
   return (
-    <div className="flex-1 px-5 sm:px-10 md:px-20 max-w-[800px] mx-auto w-full pt-[40px] pb-[80px]">
+    <div className="flex-1 px-5 sm:px-10 md:px-20 max-w-[1000px] mx-auto w-full pt-[40px] pb-[80px]">
         <div className="mb-10">
           <Link
             to="/"

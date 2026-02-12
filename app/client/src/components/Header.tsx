@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import ThemeToggle from "./ThemeToggle";
 
 type HeaderProps = {
   rightAction?: React.ReactNode;
@@ -15,6 +16,7 @@ export default function Header({ rightAction }: HeaderProps) {
           Home
         </Link>
         <nav className="flex items-center gap-6">
+          <ThemeToggle />
           {rightAction}
           <Link
             to="/about"
