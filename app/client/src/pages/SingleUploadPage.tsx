@@ -44,9 +44,6 @@ export default function SingleUploadPage() {
         <h1 className="font-sans font-extrabold uppercase text-foreground mb-4 text-3xl md:text-4xl tracking-tight">
           Orthanc
         </h1>
-        <p className="font-serif text-foreground/80 max-w-xl text-base leading-relaxed">
-          Upload pre- and post-disaster satellite or aerial images. We analyze building damage and return a segmentation mask and class stats.
-        </p>
       </section>
 
       <section className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-8">

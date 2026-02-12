@@ -144,7 +144,7 @@ export default function About() {
             <strong className="text-foreground">Damage priority</strong> is the slider value from 0 to 100%, interpreted as a weight. At <strong className="text-foreground">100%</strong>, the term with distance is zero: the algorithm always goes to the highest-damage site next. At <strong className="text-foreground">0%</strong>, the damage term is zero: it always goes to the nearest unvisited site. In between, the route balances severity and travel cost. Greedy is fast and easy to tune; it does not guarantee a globally optimal route.
           </p>
 
-          <h3 className="text-foreground font-sans font-bold text-sm uppercase tracking-wider mb-2 mt-6">TSP (OR-Tools)</h3>
+          <h3 className="text-foreground font-sans font-bold text-sm uppercase tracking-wider mb-2 mt-6">Traveling Salesman Problem</h3>
           <p className="prose-copy text-foreground/80 mb-3">
             The TSP option uses <strong className="text-foreground">Google OR-Tools</strong> to solve for a route that minimizes <strong className="text-foreground">damage-weighted travel cost</strong>. Each segment's cost is the actual distance multiplied by a factor that penalizes visiting low-damage sites when damage priority is high. The solver finds the visit order that minimizes total cost over the whole route.
           </p>

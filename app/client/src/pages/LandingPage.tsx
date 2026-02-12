@@ -13,9 +13,6 @@ export default function LandingPage() {
         <h1 className="font-sans font-extrabold uppercase text-gradient-animated mt-8 mb-6 text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight">
           Orthanc
         </h1>
-        <p className="font-serif text-foreground/80 text-lg md:text-xl leading-relaxed mb-12">
-          Upload pre- and post-disaster satellite or aerial images. We analyze building damage and return a segmentation mask and class stats.
-        </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link to="/upload">
             <Button variant="filled" showArrow={true}>
